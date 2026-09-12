@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0b12">
+  <meta name="description" content="404 Society — premium streetwear.">
+  <title>404 Society — Wear Your Identity</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="/">404<span>SOCIETY</span></a>
+    <nav>
+      <a href="#shop">Shop</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="cart-button" id="cartButton">Bag <b id="cartCount">0</b></button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">PREMIUM STREETWEAR / 404 SOCIETY</p>
+        <h1>WEAR YOUR<br><span>IDENTITY.</span></h1>
+        <p class="hero-text">Loud graphics. Clean silhouettes. No default settings.</p>
+        <a class="cta" href="#shop">Shop the drop <span>↗</span></a>
+      </div>
+      <div class="hero-art" aria-label="Colorful abstract 404 Society artwork">
+        <div class="orb orb-a"></div><div class="orb orb-b"></div>
+        <div class="orb orb-c"></div><div class="grid"></div>
+        <strong>404</strong>
+      </div>
+    </section>
+
+    <section id="shop" class="shop">
+      <div class="section-head">
+        <div><p class="eyebrow">THE FIRST DROP</p><h2>Pick your signal.</h2></div>
+        <div class="filters" id="filters"></div>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+
+    <section id="about" class="manifesto">
+      <p class="eyebrow">THE 404 MANIFESTO</p>
+      <h2>Normal is a<br><em>bug.</em></h2>
+      <p>404 Society is a fictional demo catalog built for your store launch. Replace the demo product data with your real Qikink SKUs, mockups and pricing when ready.</p>
+    </section>
+  </main>
+
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head"><h2>Your bag</h2><button id="closeCart">×</button></div>
+    <div id="cartItems"></div>
+    <div class="cart-foot">
+      <div class="total"><span>Total</span><strong id="cartTotal">₹0</strong></div>
+      <button class="checkout" id="checkoutButton">Checkout</button>
+      <p class="secure">Secure payment via Cashfree. Your card/UPI details never touch this store.</p>
+    </div>
+  </aside>
+  <div class="backdrop" id="backdrop"></div>
+
+  <div class="modal" id="checkoutModal" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close" id="closeModal">×</button>
+      <p class="eyebrow">CHECKOUT</p>
+      <h2>Almost there.</h2>
+      <form id="checkoutForm">
+        <label>Name<input name="name" required autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required autocomplete="email"></label>
+        <label>Phone<input name="phone" required inputmode="tel" autocomplete="tel" pattern="[0-9+ ()-]{8,}"></label>
+        <button class="checkout" type="submit">Continue to payment</button>
+      </form>
+      <p id="checkoutMessage" class="message"></p>
+    </div>
+  </div>
+
+  <footer><span>© 2026 404 Society</span><span>Built for the ones who don't fit the default.</span></footer>
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
