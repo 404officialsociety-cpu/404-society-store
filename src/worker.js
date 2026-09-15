@@ -106,7 +106,120 @@ async function handleQikink(request, env){
   return json({error:"Qikink adapter placeholder: connect the exact order endpoint/payload from your Qikink account before enabling live fulfillment."},501);
 }
 
-async function handleWebhook(request, env){
+async function handleQikink(request, env) {
+  if (!env.QIKINK_API_BASE || !env.QIKINK_API_KEY || !env.QIKINK_API_SECRET) {
+    return json({ error: "Qikink credentials are not configured" }, 500);
+  }
+
+  const body = await request.json();
+  last_name: customer.last_name || "",
+
+  const tokenResponse = await fetch(
+    `${env.QIKINK_API_BASE}/api/token`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        ClientId: env.QIKINK_API_KEY,
+        client_secret: env.QIKINK_API_SECRET
+      })
+    }
+  );
+
+  const tokenData = await tokenResponse.json();
+
+  if (!tokenResponse.ok || !tokenData.Accesstoken) {
+    return json({
+      error: "Qikink authentication failed"
+    }, 502);
+  }
+
+  const customer = body.customer || {};
+  const items = Array.isArray(body.items) ? body.items : [];
+
+  if (!items.length) {
+    return json({ error: "No items in order" }, 400);
+  }
+
+  const orderNumber =
+    "404" + String(body.order_id || Date.now()).replace(/\D/g, "").slice(-12);
+
+  const lineItems = items.map((item) => ({
+    search_from_my_products: 1,
+    sku: String(item.sku || item.productId || ""),
+    quantity: String(Math.max(1, Number(item.quantity || 1))),
+    price: String(Number(item.price || 0))
+  }));
+
+  const qikinkOrder = {
+    order_number: orderNumber,
+    qikink_shipping: "1",
+    gateway: "Prepaid",
+    total_order_value: String(
+      lineItems.reduce(
+        (total, item) =>
+          total + Number(item.price) * Number(item.quantity),
+        0
+      )
+    ),
+    line_items: lineItems,
+    shipping_address: {
+      address1: customer.address1 || customer.address || "",
+address2: customer.address2 || "",
+phone: customer.phone || "",
+email: customer.email || "",
+city: customer.city || "",
+zip: customer.zip || customer.pincode || "",
+province: customer.province || customer.state || "",
+country_code: "IN"
+      first_name: customer.first_name || customer.name || "",
+      last_name: customer.last_name || "",
+      address1: customer.address1 || customer.address || "",
+      address2: customer.address2 || "",
+      phone: customer.phone || "",
+      email: customer.email || "",
+      city: customer.city || "",
+      zip: customer.zip || customer.pincode || "",
+      province: customer.province || customer.state || "",
+      country_code: "IN"
+    }
+  };
+
+  const orderResponse = await fetch(
+    `${env.QIKINK_API_BASE}/api/order/create`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "ClientId": env.QIKINK_API_KEY,
+        "Accesstoken": tokenData.Accesstoken
+      },
+      body: JSON.stringify(qikinkOrder)
+    }
+  );
+
+  const result = await orderResponse.json().catch(() => ({}));
+
+  if (!orderResponse.ok) {
+    return json({
+      error: "Qikink order creation failed",
+      details: result
+    }, 502);
+  }
+
+  return json({
+    ok: true,
+    qikink: result
+  });
+}
+__name(handleQikink, "handleQikink");
+async function handleWebhook(request, env) {
+  }
+__name(handleQikink, "handleQikink");
+async function handleWebhook(request, env) {
+last_name: customer.last_name || "",
   // Keep webhook verification/processing server-side. Add the signature verification
   // required by your current Cashfree account/API documentation before going live.
   const body=await request.text();
