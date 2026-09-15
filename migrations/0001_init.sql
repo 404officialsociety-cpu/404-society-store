@@ -14,5 +14,3 @@ CREATE TABLE IF NOT EXISTS orders (
 
 CREATE INDEX IF NOT EXISTS idx_orders_cashfree_order_id
 ON orders(cashfree_order_id);
-CREATE INDEX IF NOT EXISTS idx_orders_cashfree_order_id
-ON orders(cashfree_order_id);
